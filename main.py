@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-from concurrent.futures import ThreadPoolExecutor
 from wikipedia_api.wikipedia_operations import WikipediaApi
+from  database.database_operations import DatabaseOperations
 
 
 # 4. Main Execution Pipeline
@@ -25,13 +25,16 @@ def main():
     print(f"Found {len(page_ids)} unique page IDs.")
 
     print("Fetching page details in parallel...")
-    pages = wiki_api.fetch_pages_details(page_ids)
-    print(f"Fetched details for {len(pages)} pages.")
+    #pages = wiki_api.fetch_pages_details(page_ids)
+    #print(f"Fetched details for {len(pages)} pages.")
 
     print("Loading data into DuckDB...")
-    # TODO: Implement loading data into DuckDB
+
+    db_ops = DatabaseOperations()
+
+    db_write_response = db_ops.load_data_parallel(table_name="recent_changes", data=recent_changes)
     #load_to_duckdb(recent_changes, pages)
-    print("Data successfully loaded into DuckDB.")
+    print(f"Data successfully loaded into DuckDB. {db_write_response}")
 
 
 if __name__ == "__main__":

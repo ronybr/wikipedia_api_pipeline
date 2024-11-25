@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 class WikipediaApi:
     def __init__(self):
-        self.session = requests.Session()
         self.api_url = 'https://en.wikipedia.org/w/api.php'
 
     def fetch_recent_changes_chunk(self, start_date: datetime, end_date: datetime, limit: int =500):
@@ -49,7 +48,7 @@ class WikipediaApi:
             raise error
 
     def fetch_recent_changes_parallel(self, start_date: datetime, end_date: datetime,
-                                      limit: int = 500, num_threads: int = 5):
+                                      limit: int = 500, num_threads: int = 10):
         """
         Fetch recent changes in parallel by splitting the date range into smaller chunks.
         Params:
