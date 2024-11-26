@@ -82,7 +82,7 @@ class WikipediaApi:
                     logger.error(f"Error fetching range {future_to_range[future]}: {e}")
         return changes
 
-    def fetch_pages_batch(self, batch):
+    def fetch_pages_batch(self, batch) -> list:
         params = {
             "action": "query",
             "format": "json",
@@ -93,7 +93,10 @@ class WikipediaApi:
         try:
             response = requests.get(self.api_url, params=params)
             response.raise_for_status()
-            return response.json()["query"]["pages"]
+            # Extract the page data from the response
+            pages = response.json()["query"]["pages"]
+            # Return only the values (the actual page data) from the dictionary
+            return list(pages.values())
         except requests.RequestException as error:
             logger.error(f"Error fetching page in batch: {error}")
             raise error
@@ -112,11 +115,17 @@ class WikipediaApi:
             page_batches = [list(page_ids)[i:i + batch_size] for i in range(0, len(page_ids), batch_size)]
 
             # Fetch batches in parallel
-            pages = {}
+            pages = []
             with ThreadPoolExecutor(max_workers=num_threads) as executor:
                 results = executor.map(self.fetch_pages_batch, page_batches)
                 for result in results:
-                    pages.update(result)
+                    for page_data in result:
+                        # Check if the page data contains the key 'missing'
+                        if "missing" in page_data:
+                            logger.warning(f"Page not found: {page_data}")
+                            continue
+                        else:
+                            pages.append(page_data)  # Add the page details to the list
 
             return pages
         except Exception as error:

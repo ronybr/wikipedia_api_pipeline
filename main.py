@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
+import logging
+from datetime import datetime
 from wikipedia_api.wikipedia_operations import WikipediaApi
-from  database.database_operations import DatabaseOperations
+from database.database_operations import DatabaseOperations
 
 
 # 4. Main Execution Pipeline
@@ -14,7 +15,6 @@ def main():
     wiki_api = WikipediaApi()
 
     print("Fetching recent changes...")
-    #recent_changes = wiki_api.fetch_recent_changes_chunk(start_date, end_date)
     recent_changes = wiki_api.fetch_recent_changes_parallel(start_date=start_date, end_date=end_date)
     print(f"Fetched {len(recent_changes)} recent changes.")
     # Print the time taken in minutes to collect all changes
@@ -25,16 +25,22 @@ def main():
     print(f"Found {len(page_ids)} unique page IDs.")
 
     print("Fetching page details in parallel...")
-    #pages = wiki_api.fetch_pages_details(page_ids)
-    #print(f"Fetched details for {len(pages)} pages.")
+    pages = wiki_api.fetch_pages_details(page_ids)
+    print(f"Fetched details for {len(pages)} pages.")
 
     print("Loading data into DuckDB...")
 
     db_ops = DatabaseOperations()
 
-    db_write_response = db_ops.load_data_parallel(table_name="recent_changes", data=recent_changes)
-    #load_to_duckdb(recent_changes, pages)
-    print(f"Data successfully loaded into DuckDB. {db_write_response}")
+    # Write recent changes to DuckDB
+    #recent_changes_db_write = db_ops.load_data_parallel(table_name="recent_changes", data=recent_changes)
+
+    # Write recent changes to DuckDB
+    pages_db_write_response = db_ops.load_data_parallel(table_name="pages", data=pages)
+
+    db_ops.close_connection()
+
+    print("Data successfully loaded into DuckDB")
 
 
 if __name__ == "__main__":
