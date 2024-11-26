@@ -1,0 +1,8 @@
+dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      threads: 1
+      path: ../../english_wikipedia.db
+      database: "english_wikipedia.db"
