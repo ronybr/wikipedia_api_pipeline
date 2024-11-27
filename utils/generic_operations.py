@@ -1,3 +1,6 @@
+"""
+This module contains generic operations that can be applied to any DataFrame.
+"""
 import pandas as pd
 import logging
 
@@ -8,12 +11,10 @@ logger = logging.getLogger(__name__)
 def clean_duplicates(df: pd.DataFrame, subset: list = None) -> pd.DataFrame:
     """
     Counts and removes duplicate rows in a Pandas DataFrame.
-
     Args:
         df (pd.DataFrame): The input DataFrame.
         subset (list, optional): List of column names to check for duplicates.
                                  If None, all columns are considered.
-
     Returns:
         pd.DataFrame: A cleaned DataFrame with duplicates removed.
     """

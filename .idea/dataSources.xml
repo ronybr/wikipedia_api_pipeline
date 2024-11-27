@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="english_wikipedia.db" uuid="2699f66f-19aa-4a3a-863b-21174d68be88">
+      <driver-ref>duckdb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.duckdb.DuckDBDriver</jdbc-driver>
+      <jdbc-url>jdbc:duckdb:$PROJECT_DIR$/english_wikipedia.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

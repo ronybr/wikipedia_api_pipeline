@@ -1,0 +1,14 @@
+name: 'wikipedia_api_pipeline'
+version: '1.0.0'
+config-version: 2
+
+profile: 'default'
+
+# Paths to models
+model-paths: ["models"]
+
+# Models configuration
+models:
+  wikipedia_api_pipeline:
+    +schema: wikipedia
+    +materialized: table

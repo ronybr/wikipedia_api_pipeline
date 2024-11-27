@@ -1,8 +1,11 @@
+"""
+This module contains the DatabaseOperations class to perform database operations using DuckDB.
+"""
 import duckdb
 import pandas as pd
 import logging
 import threading
-import gc  # Garbage collector module
+import gc
 from concurrent.futures import ThreadPoolExecutor
 from utils.generic_operations import clean_duplicates
 
@@ -11,6 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class DatabaseOperations:
+    """
+    Class to perform database operations using DuckDB.
+    """
 
     def __init__(self):
         self.db_path = "english_wikipedia.db"
@@ -24,7 +30,6 @@ class DatabaseOperations:
         Args:
             table_name (str): The name of the table to load data into.
             data (list of dict): The data to load.
-            chunk_size (int): The number of rows per chunk.
             max_workers (int): Number of threads to use for parallel processing.
         """
         # Clear memory before execution
@@ -65,7 +70,6 @@ class DatabaseOperations:
     def _load_chunk(self, args):
         """
         Load a single chunk of data into DuckDB.
-
         Args:
             args (tuple): A tuple containing the data chunk and table name.
         """
